@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<input type="text" name="" id="" value="" />
+	<button>搜索</button>
+	<div id="box">
+		
+	</div>
+	<script src="lib/jquery-1.11.3.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	    $(function(){
+	        $('button').on('click',function(){
+	        	var text=$('input').val();
+//	        	console.log(text);
+				$.ajax({
+                    url: 'https://sug.so.360.cn/suggest?encodein=utf-8&encodeout=utf-8&format=json&fields=word',//请求360搜索的公开接口
+                    type: 'get',
+                    dataType: 'jsonp',//跨域请求
+                    data: {word: text},//携带参数
+                    jsonpCallback:'suggest_so',//指定360提供的jsonp的回调函数
+                    success:function(data){
+                    	console.log(data);
+                    	console.log(data.result);
+                    	var con = "";
+                    	$.each(data.result,function(index,item){
+                    		con+="<li>"+item.word+"</li>"
+                    	})
+                    	console.log(con);    //可以在控制台打印一下看看，这是拼起来的标签和数据
+                        $("#box").html(con); //把内容入到这个div中即完成
+					},
+                    error:function(err){
+	                    console.log("请求失败");
+	                }
+                })
+
+	        });
+	    });
+	</script>
+</body>
+</html>
